@@ -157,10 +157,12 @@ class RegistroController {
                 return;
             }
 
-            // Redireccionar a boleto virtual en caso de haber finalizado su registro
-            if(isset($registro->regalo_id) && $registro->paquete_id === "1") {
+            // Redireccionar a boleto virtual en caso de haber finalizado su registro 
+            // o elegir los eventos para finalizar el registro presencial
+            if($registro->regalo_id === 1 && $registro->paquete_id === "1" ) {
+                header('Location: /finalizar-registro/conferencias');
+            } else if($registro->regalo_id != 1)  {
                 header('Location: /boleto?id=' . urlencode($registro->token));
-                return;
             }
 
             $eventos = Evento::ordenar('hora_id', 'ASC');

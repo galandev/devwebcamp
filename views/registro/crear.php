@@ -95,7 +95,6 @@
                         actions.redirect('http://localhost:3000/finalizar-registro/conferencias');
                     }
                 })
-            
           });
         },
 

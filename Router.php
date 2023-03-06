@@ -20,22 +20,19 @@ class Router
     public function comprobarRutas()
     {
 
-        $url_actual = ($_SERVER['REQUEST_URI'] === '') ? '/' :  $_SERVER['REQUEST_URI'] ;
+        $url_actual = $_SERVER['PATH_INFO'] ?? '/';
         $method = $_SERVER['REQUEST_METHOD'];
 
-        $splitURL = explode('?', $url_actual);
-
         if ($method === 'GET') {
-            $fn = $this->getRoutes[$splitURL[0]] ?? null; //$splitURL[0] contiene la URL sin variables 
+            $fn = $this->getRoutes[$url_actual] ?? null;
         } else {
-          $fn = $this->postRoutes[$splitURL[0]] ?? null;
+            $fn = $this->postRoutes[$url_actual] ?? null;
         }
 
         if ( $fn ) {
-            // Call user fn va a llamar una función cuando no sabemos cual sera
-            call_user_func($fn, $this); // This es para pasar argumentos
+            call_user_func($fn, $this);
         } else {
-            echo "Página No Encontrada o Ruta no válida";
+            header('Location: /404');
         }
     }
 
@@ -52,7 +49,7 @@ class Router
         $contenido = ob_get_clean(); // Limpia el Buffer
 
         // Utilizar el layout de acuerdo a la URL
-        $url_actual = ($_SERVER['REQUEST_URI'] === '') ? '/' :  $_SERVER['REQUEST_URI'] ;
+        $url_actual = $_SERVER['PATH_INFO'] ?? '/';
 
         if(str_contains($url_actual, 'admin')) {
             include_once __DIR__ . '/views/admin-layout.php';
