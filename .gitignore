@@ -4,3 +4,4 @@ node_modules/
 gulpfile.js
 .DS_Store
 .env
+devwebcamp.sql
