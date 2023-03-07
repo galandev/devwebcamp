@@ -26,7 +26,7 @@ class RegistroController {
             // Verificar si el usuario ya ha comprado un plan
             $registro = Registro::where('usuario_id', $_SESSION['id']);
 
-            if(isset($registro) && $registro->paquete_id === "3" || $registro->paquete_id === "2" ) {
+            if(isset($registro) && ($registro->paquete_id === "3" || $registro->paquete_id === "2" )) {
                 header('Location: /boleto?id=' . urlencode($registro->token));
                 return;
             }
@@ -157,13 +157,19 @@ class RegistroController {
                 return;
             }
 
-            // Redireccionar a boleto virtual en caso de haber finalizado su registro 
-            // o elegir los eventos para finalizar el registro presencial
-            if($registro->regalo_id === 1 && $registro->paquete_id === "1" ) {
+            //Redireccionar a boleto virtual si ya lleno su registro
+            if( $registro->regalo_id === 1 && $registro->paquete_id === "1" ) {
                 header('Location: /finalizar-registro/conferencias');
             } else if($registro->regalo_id != 1)  {
                 header('Location: /boleto?id=' . urlencode($registro->token));
             }
+            
+
+            // Redireccionar a boleto virtual en caso de haber finalizado su registro
+            // if(isset($registro->regalo_id) && $registro->paquete_id === "1") {
+            //     header('Location: /boleto?id=' . urlencode($registro->token));
+            //     return;
+            // }
 
             $eventos = Evento::ordenar('hora_id', 'ASC');
             $eventos_formateados = [];
