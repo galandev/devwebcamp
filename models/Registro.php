@@ -22,5 +22,4 @@ class Registro extends ActiveRecord {
         $this->usuario_id = $args['usuario_id'] ?? '';
         $this->regalo_id = $args['regalo_id'] ?? 1;
     }
-    
 }   

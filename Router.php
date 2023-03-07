@@ -20,15 +20,13 @@ class Router
     public function comprobarRutas()
     {
 
-        $url_actual = ($_SERVER['REQUEST_URI'] === '') ? '/' :  $_SERVER['REQUEST_URI'] ;
+        $url_actual = strtok($_SERVER['REQUEST_URI'], '?') ?? '/';
         $method = $_SERVER['REQUEST_METHOD'];
 
-        $splitURL = explode('?', $url_actual);
-
         if ($method === 'GET') {
-            $fn = $this->getRoutes[$splitURL[0]] ?? null; //$splitURL[0] contiene la URL sin variables 
+            $fn = $this->getRoutes[$url_actual] ?? null;
         } else {
-            $fn = $this->postRoutes[$splitURL[0]] ?? null;
+            $fn = $this->postRoutes[$url_actual] ?? null;
         }
 
         if ( $fn ) {
@@ -50,13 +48,15 @@ class Router
 
         $contenido = ob_get_clean(); // Limpia el Buffer
 
-        // Utilizar el layout de acuerdo a la URL
-        $url_actual = ($_SERVER['REQUEST_URI'] === '') ? '/' :  $_SERVER['REQUEST_URI'] ;
+        // Utilizar el Layout de acuerdo a la URL
+        $url_actual = strtok($_SERVER['REQUEST_URI'], '?') ?? '/';
 
-        if(str_contains($url_actual, 'admin')) {
+        if(str_contains($url_actual, '/admin')) {
             include_once __DIR__ . '/views/admin-layout.php';
         } else {
             include_once __DIR__ . '/views/layout.php';
         }
+
+        
     }
 }
